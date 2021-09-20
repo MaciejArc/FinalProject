@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.CompanyRepository;
 import pl.coderslab.repository.UserRepository;
+import pl.coderslab.service.UserServic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,11 +24,13 @@ public class AdminController {
     private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CompanyRepository companyRepository;
+    private final UserServic userServic;
 
-    public AdminController(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyRepository companyRepository) {
+    public AdminController(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyRepository companyRepository, UserServic userServic) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.companyRepository = companyRepository;
+        this.userServic = userServic;
     }
 
     @ModelAttribute
@@ -46,7 +49,7 @@ public class AdminController {
 
     @GetMapping("/users")
     public String usersAll(Model model) {
-        model.addAttribute("users", userRepository.findUserByRole("USER"));
+        model.addAttribute("users", userRepository.findUserByRole("ROLE_WORKER"));
         return "/user/userAll.jsp";
     }
 
@@ -77,9 +80,9 @@ public class AdminController {
             model.addAttribute("error", "Użytkownik o podanym adresie email istnieje!");
             return "/user/userAddForm.jsp";
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_ADMIN");
-        userRepository.save(user);
+
+      userServic.registtyNewWorker(user);
+
         model.addAttribute("users", userRepository.findAll());
         return "redirect:/admin/users";
 

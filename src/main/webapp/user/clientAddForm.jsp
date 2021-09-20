@@ -35,8 +35,8 @@
         </tr>
         <tr>
             <td>Email:</td>
-            <td> <form:input path="email"/> <form:errors path="email"/></td>
-            ${error}
+            <td> <form:input path="email"/> <form:errors path="email"/> <br>${error}</td>
+
         </tr>
         <tr>
             <td>Numer telefonu:</td>

@@ -90,7 +90,7 @@ public class FaultOrderController {
 
         String id = request.getParameter("id");
         model.addAttribute("faultOrder", faultOrderRepository.findById(Long.parseLong(id)).get());
-        model.addAttribute("users", userRepository.findUserByRole("USER"));
+        model.addAttribute("users", userRepository.findUserByRole("ROLE_WORKER"));
         return "/faultOrder/faultOrderUpdate.jsp";
     }
 
