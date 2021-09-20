@@ -45,6 +45,7 @@ public class User implements UserDetails {
     @Transient
     private String fullName;
 
+
     public Long getId() {
         return id;
     }

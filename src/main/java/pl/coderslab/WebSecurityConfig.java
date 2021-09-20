@@ -31,10 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/addresses/**").hasRole("CLIENT")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/faultOrder/all").hasRole("ADMIN")
-                .antMatchers("/user/add/user").hasRole("ADMIN")
-                .antMatchers("/company/add").hasRole("ADMIN")
+                .antMatchers("/company/**").hasRole("ADMIN")
                 .antMatchers("/faultOrder/update").hasRole("ADMIN")
-                .antMatchers("/user/info").hasRole("ADMIN")
                 .and()
                 .formLogin().defaultSuccessUrl("/user/role");
     }

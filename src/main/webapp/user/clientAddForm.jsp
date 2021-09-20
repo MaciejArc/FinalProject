@@ -36,11 +36,13 @@
         <tr>
             <td>Email:</td>
             <td> <form:input path="email"/> <form:errors path="email"/></td>
+            ${error}
         </tr>
         <tr>
             <td>Numer telefonu:</td>
             <td><form:input path="phone"/> <form:errors path="email"/></td>
         </tr>
+
     </table>
     <button type="submit">Wyślij</button>
 
