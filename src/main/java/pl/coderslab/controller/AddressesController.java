@@ -11,16 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.entity.Addresses;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.AddressesRepository;
+import pl.coderslab.service.AddressesServic;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/addresses")
 public class AddressesController {
-    private final AddressesRepository addressesRepository;
 
-    public AddressesController(AddressesRepository addressesRepository) {
-        this.addressesRepository = addressesRepository;
+    private final AddressesServic addressesServic;
+
+    public AddressesController(AddressesServic addressesServic) {
+
+        this.addressesServic = addressesServic;
     }
 
     @ModelAttribute
@@ -40,9 +43,7 @@ public class AddressesController {
         if (result.hasErrors()) {
             return "/addresses/addressesAddForm.jsp";
         }
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        addresses.setUser((User) principal);
-        addressesRepository.save(addresses);
+        addressesServic.addAddress(addresses);
         return "redirect:/user/start";
     }
 }

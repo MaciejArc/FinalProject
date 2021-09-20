@@ -9,8 +9,6 @@ import pl.coderslab.entity.FaultOrder;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.FaultOrderRepository;
 import pl.coderslab.repository.UserRepository;
-
-import javax.validation.constraints.Email;
 import java.util.List;
 
 

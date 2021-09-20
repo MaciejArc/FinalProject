@@ -69,15 +69,15 @@ public class UserController {
 
 
 
-//    @GetMapping("/role")
-//    public String role() {
-//
-//        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (principal.getRole().equals("ROLE_ADMIN")) {
-//            return "redirect:/admin/start";
-//        }
-//        return "redirect:/user/start";
-//    }
+    @GetMapping("/role")
+    public String role() {
+
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal.getRole().equals("ROLE_ADMIN")) {
+            return "redirect:/admin/start";
+        }
+        return "redirect:/user/start";
+    }
 
 
 
