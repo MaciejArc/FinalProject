@@ -10,4 +10,5 @@ import java.util.Optional;
 
 public interface FaultOrderRepository extends JpaRepository<FaultOrder, Long> {
     List<FaultOrder> findFaultOrdersByClient(User user);
+Boolean existsByClientAndId(User user,Long id);
 }

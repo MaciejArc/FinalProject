@@ -38,16 +38,21 @@ public class FaultOrderController {
     @GetMapping("/add")
     public String faultOrderAdd(Model model, HttpServletRequest request) {
 
+       User principal = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         if (request.getParameter("id").isEmpty()) {
             model.addAttribute("faultOrder", new FaultOrder());
 
-        } else {
-            String id = request.getParameter("id");
-            model.addAttribute("faultOrder", faultOrderRepository.findById(Long.parseLong(id)));
+        } else { Long id = Long.parseLong(request.getParameter("id"));
+           if(faultOrderRepository.existsByClientAndId(principal,id)){
+               model.addAttribute("faultOrder", faultOrderRepository.findById(id));
+           }else {
+               return "redirect:/user/start";
+           }
 
         }
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         model.addAttribute("addresses", addressesRepository.findAddressesByUser((User) principal));
         return "/faultOrder/faultOrderAddForm.jsp";
     }
