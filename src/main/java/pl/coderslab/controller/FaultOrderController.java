@@ -10,6 +10,7 @@ import pl.coderslab.entity.User;
 import pl.coderslab.repository.AddressesRepository;
 import pl.coderslab.repository.FaultOrderRepository;
 import pl.coderslab.repository.UserRepository;
+import pl.coderslab.service.FaultOrderServic;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -22,11 +23,13 @@ public class FaultOrderController {
     private final AddressesRepository addressesRepository;
     private final UserRepository userRepository;
 
-    public FaultOrderController(FaultOrderRepository faultOrderRepository, AddressesRepository addressesRepository, UserRepository userRepository) {
+    private final FaultOrderServic faultOrderServic;
 
+    public FaultOrderController(FaultOrderRepository faultOrderRepository, AddressesRepository addressesRepository, UserRepository userRepository, FaultOrderServic faultOrderServic) {
         this.faultOrderRepository = faultOrderRepository;
         this.addressesRepository = addressesRepository;
         this.userRepository = userRepository;
+        this.faultOrderServic = faultOrderServic;
     }
 
     @ModelAttribute
@@ -43,9 +46,10 @@ public class FaultOrderController {
         if (request.getParameter("id").isEmpty()) {
             model.addAttribute("faultOrder", new FaultOrder());
 
-        } else { Long id = Long.parseLong(request.getParameter("id"));
-           if(faultOrderRepository.existsByClientAndId(principal,id)){
-               model.addAttribute("faultOrder", faultOrderRepository.findById(id));
+        } else {
+            Long id = Long.parseLong(request.getParameter("id"));
+           if(faultOrderServic.faultOrderVerification(principal,id)){
+               model.addAttribute("faultOrder", faultOrderServic.findFaultOrderByUserId(id));
            }else {
                return "redirect:/user/start";
            }
@@ -60,35 +64,26 @@ public class FaultOrderController {
     @PostMapping("/add")
     public String faultOrderAddPost(@Valid FaultOrder faultOrder, BindingResult result, Model model, HttpServletRequest request) {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (result.hasErrors()) {
-            model.addAttribute("addresses", addressesRepository.findAddressesByUser((User) principal));
+            model.addAttribute("addresses", addressesRepository.findAddressesByUser(principal));
             return "/faultOrder/faultOrderAddForm.jsp";
         }
         if (request.getParameter("id").isEmpty()) {
-            faultOrder.setClient((User) principal);
+            faultOrder.setClient(principal);
             faultOrderRepository.save(faultOrder);
 
         } else {
-            FaultOrder faultOrder1 = faultOrderRepository.findById(faultOrder.getId()).get();
-            faultOrder1.setClient((User) principal);
-            faultOrder1.setAddress(faultOrder.getAddress());
-            faultOrder1.setDescription(faultOrder.getDescription());
-            faultOrderRepository.save(faultOrder1);
+            FaultOrder faultOrder2 = faultOrderServic.findFaultOrderById(faultOrder.getId());
+            faultOrderServic.editFaultOrder(faultOrder2,principal,faultOrder.getAddress(),faultOrder.getDescription());
+
         }
         return "redirect:/user/start";
 
     }
 
-    @GetMapping("/all")
-    public String faultOrderAll(Model model) {
 
-        model.addAttribute("faultOrder", faultOrderRepository.findAll());
-        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("user", principal);
-        return "/faultOrder/faultOrderAll.jsp";
-    }
 
     @GetMapping("/update")
     public String faultOrderUpdate(Model model, HttpServletRequest request) {

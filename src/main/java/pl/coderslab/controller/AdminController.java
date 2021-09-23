@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.entity.User;
 import pl.coderslab.repository.CompanyRepository;
 import pl.coderslab.repository.UserRepository;
+import pl.coderslab.service.FaultOrderServic;
 import pl.coderslab.service.UserServic;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +26,14 @@ public class AdminController {
     private final PasswordEncoder passwordEncoder;
     private final CompanyRepository companyRepository;
     private final UserServic userServic;
+    private final FaultOrderServic faultOrderServic;
 
-    public AdminController(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyRepository companyRepository, UserServic userServic) {
+    public AdminController(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyRepository companyRepository, UserServic userServic, FaultOrderServic faultOrderServic) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.companyRepository = companyRepository;
         this.userServic = userServic;
+        this.faultOrderServic = faultOrderServic;
     }
 
     @ModelAttribute
@@ -96,4 +99,13 @@ public class AdminController {
 
         return "/user/userInfo.jsp";
     }
+    @GetMapping("/faultOrderAll")
+    public String faultOrderAll(Model model) {
+
+        model.addAttribute("faultOrder", faultOrderServic.findAllFaultOrder());
+        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("user", principal);
+        return "/faultOrder/faultOrderAll.jsp";
+    }
+
 }

@@ -30,7 +30,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/faultOrder/add").hasRole("CLIENT")
                 .antMatchers("/addresses/**").hasRole("CLIENT")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/faultOrder/all").hasRole("ADMIN")
                 .antMatchers("/company/**").hasRole("ADMIN")
                 .antMatchers("/faultOrder/update").hasRole("ADMIN")
                 .and()
