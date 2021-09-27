@@ -18,6 +18,7 @@ public class FaultOrderServic {
         this.faultOrderRepository = faultOrderRepository;
     }
 
+
     public Boolean faultOrderVerification(User user,Long id){
         return faultOrderRepository.existsByClientAndId(user,id);
 
@@ -25,6 +26,7 @@ public class FaultOrderServic {
     public Optional<FaultOrder> findFaultOrderByUserId(Long id){
         return faultOrderRepository.findById(id);
     }
+
     public FaultOrder findFaultOrderById(Long id){
         return faultOrderRepository.findById(id).get();
 
@@ -42,4 +44,18 @@ public class FaultOrderServic {
         faultOrder.setAddress(addresses);
         return faultOrderRepository.save(faultOrder);
     }
+
+    public FaultOrder updateFaultOrder(FaultOrder faultOrder){
+        FaultOrder faultOrder1 = faultOrderRepository.findById(faultOrder.getId()).get();
+        faultOrder1.setStatus(faultOrder.getStatus());
+        faultOrder1.setUser(faultOrder.getUser());
+        return faultOrderRepository.save(faultOrder1);
+
+    }
+
+    public void deleteFaultOrder(FaultOrder faultOrder){
+        faultOrderRepository.delete(faultOrder);
+    }
+
+
 }

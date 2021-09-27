@@ -22,15 +22,14 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
     private final UserServic userServic;
     private final FaultOrderServic faultOrderServic;
 
-    public AdminController(UserRepository userRepository, PasswordEncoder passwordEncoder, CompanyRepository companyRepository, UserServic userServic, FaultOrderServic faultOrderServic) {
+    public AdminController(UserRepository userRepository, CompanyRepository companyRepository, UserServic userServic, FaultOrderServic faultOrderServic) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.companyRepository = companyRepository;
         this.userServic = userServic;
         this.faultOrderServic = faultOrderServic;
